@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunsets Apparel - Bold E-commerce with Sweepstakes</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* SUNSET COLOR PALETTE & BASE STYLES */
+        :root {
+            --sunset-orange: #FF6B35;
+            --sunset-pink: #FF4D80;
+            --sunset-purple: #8A2BE2;
+            --sunset-yellow: #FFD700;
+            --sunset-dark: #1A1A2E;
+            --sunset-light: #FFFAF0;
+            --gradient-sunset: linear-gradient(135deg, #FF6B35, #FF4D80, #8A2BE2);
+            --gradient-gold: linear-gradient(135deg, #FFD700, #FFA500);
+            --shadow-bold: 0 10px 30px rgba(255, 107, 53, 0.3);
+            --shadow-deep: 0 20px 50px rgba(138, 43, 226, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--sunset-light);
+            color: var(--sunset-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* TYPOGRAPHY */
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: var(--gradient-sunset);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            font-size: 3.5rem;
+            color: var(--sunset-orange);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        h3 {
+            font-size: 2.5rem;
+            color: var(--sunset-purple);
+            margin-bottom: 1rem;
+        }
+
+        /* ANIMATIONS */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: var(--shadow-bold); }
+            50% { box-shadow: 0 0 40px rgba(255, 107, 53, 0.7); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* HEADER */
+        .header {
+            background: var(--gradient-sunset);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-deep);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--sunset-yellow);
+            color: var(--sunset-dark);
+        }
+
+        .cart-badge {
+            background: var(--sunset-yellow);
+            color: var(--sunset-dark);
+            border-radius: 50%;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+            display: none;
+        }
+
+        .cart-badge.visible {
+            display: inline-block;
+            animation: bounce 0.5s;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 90vh;
+            background: var(--gradient-sunset);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* COUNTDOWN TIMER */
+        .countdown {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 800px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .countdown-title {
+            color: var(--sunset-yellow);
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: white;
+            border-radius: 20px;
+            padding: 1.2rem;
+            min-width: 100px;
+            text-align: center;
+            animation: pulse-glow 2s infinite;
+        }
+
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: var(--gradient-sunset);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+            line-height: 1;
+        }
+
+        .countdown-label {
+            color: var(--sunset-dark);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-block;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-decoration: none;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            margin: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-gold);
+            color: var(--sunset-dark);
+            box-shadow: var(--shadow-bold);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: var(--shadow-deep);
+        }
+
+        .btn-secondary {
+            background: var(--gradient-sunset);
+            color: white;
+            box-shadow: var(--shadow-bold);
+        }
+
+        .btn-large {
+            padding: 1.5rem 3.5rem;
+            font-size: 1.6rem;
+        }
+
+        /* PRODUCT GRID */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: var(--shadow-bold);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-deep);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.6rem;
+            color: var(--sunset-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .product-price {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--sunset-orange);
+            margin-bottom: 1rem;
+        }
+
+        .entries-badge {
+            display: inline-block;
+            background: var(--gradient-sunset);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* PAGES */
+        .page {
+            display: none;
+            padding: 2rem;
+            min-height: 70vh;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* CART */
+        .cart-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 30px;
+            box-shadow: var(--shadow-bold);
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .cart-item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .cart-summary {
+            background: linear-gradient(135deg, #FFFAF0, #FFF5E6);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* DASHBOARD */
+        .dashboard {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-bold);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: var(--gradient-sunset);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        /* AUTH */
+        .auth-container {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 30px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow-deep);
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-tab.active {
+            background: var(--gradient-gold);
+            color: var(--sunset-dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--sunset-orange);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+        }
+
+        /* NOTIFICATIONS */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            box-shadow: var(--shadow-deep);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.3s ease;
+            border-left: 5px solid var(--sunset-orange);
+        }
+
+        .notification-success {
+            border-left-color: #4CAF50;
+        }
+
+        .notification-error {
+            border-left-color: #f44336;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* LOADING */
+        .loading {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 107, 53, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--sunset-orange);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2.5rem; }
+            h3 { font-size: 2rem; }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-menu {
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.6rem 1rem;
+                font-size: 1rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.5rem;
+            }
+            
+            .countdown-timer {
+                gap: 1rem;
+            }
+            
+            .countdown-item {
+                min-width: 80px;
+                padding: 1rem;
+            }
+            
+            .countdown-number {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                padding: 1.5rem;
+                gap: 1.5rem;
+            }
+            
+            .cart-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .auth-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* UTILITY CLASSES */
+        .hidden {
+            display: none !important;
+        }
+
+        .visible {
+            display: block !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-2 { margin-top: 2rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .p-2 { padding: 2rem; }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <a href="#" class="logo" onclick="showPage('home')">
+                <span class="logo-icon">🌅</span>
+                <span>Sunsets Apparel</span>
+            </a>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#" class="nav-link active" onclick="showPage('home')">Home</a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('shop')">Shop</a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('dashboard')" data-auth="logged-in">Dashboard</a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('cart')">
+                        Cart <span class="cart-badge">0</span>
+                    </a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('auth')" data-auth="logged-out">Login</a></li>
+                    <li><a href="#" class="nav-link" onclick="logout()" data-auth="logged-in">Logout</a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('admin')" data-auth="admin">Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO / HOME PAGE -->
+    <section id="home" class="page active">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>SUNSETS APPAREL</h1>
+                <p class="hero-subtitle">Shop Bold. Win Big. Every Purchase Gets You Entries!</p>
+                
+                <div class="countdown">
+                    <h2 class="countdown-title">🎉 GRAND PRIZE DRAW</h2>
+                    <div class="countdown-timer" id="countdown">
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="days">00</span>
+                            <span class="countdown-label">Days</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="hours">00</span>
+                            <span class="countdown-label">Hours</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="minutes">00</span>
+                            <span class="countdown-label">Minutes</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="seconds">00</span>
+                            <span class="countdown-label">Seconds</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-large" onclick="showPage('shop')">
+                        Shop & Enter Now!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOP PAGE -->
+    <section id="shop" class="page">
+        <div class="text-center p-2">
+            <h2>Shop Collection</h2>
+            <p>Every purchase gives you sweepstakes entries!</p>
+            
+            <div class="filters mb-2">
+                <select id="category-filter" class="form-input" style="width: auto; display: inline-block;">
+                    <option value="all">All Categories</option>
+                    <option value="hoodies">Hoodies</option>
+                    <option value="tshirts">T-Shirts</option>
+                    <option value="accessories">Accessories</option>
+                </select>
+                
+                <select id="sort-filter" class="form-input" style="width: auto; display: inline-block;">
+                    <option value="featured">Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="product-grid" id="product-grid">
+            <!-- Products will be loaded here -->
+            <div class="loading" style="grid-column: 1/-1; margin: 2rem auto;"></div>
+        </div>
+    </section>
+
+    <!-- CART PAGE -->
+    <section id="cart" class="page">
+        <div class="cart-container">
+            <h2>Your Cart</h2>
+            <div id="empty-cart" class="text-center p-2">
+                <h3>🛒 Your cart is empty</h3>
+                <p>Add some products to start earning entries!</p>
+                <button class="btn btn-primary" onclick="showPage('shop')">Start Shopping</button>
+            </div>
+            
+            <div id="cart-items"></div>
+            
+            <div class="cart-summary">
+                <h3>Order Summary</h3>
+                <div style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; margin: 1.5rem 0;">
+                    <span>Subtotal:</span>
+                    <span id="cart-subtotal">$0.00</span>
+                    <span>Entries:</span>
+                    <span id="cart-entries">0</span>
+                    <span>Shipping:</span>
+                    <span id="cart-shipping">$9.99</span>
+                    <span>Tax:</span>
+                    <span id="cart-tax">$0.00</span>
+                    <hr style="grid-column: 1/-1;">
+                    <strong>Total:</strong>
+                    <strong id="cart-total">$0.00</strong>
+                </div>
+                
+                <div id="free-shipping-message" style="background: var(--gradient-gold); padding: 1rem; border-radius: 10px; margin: 1rem 0; display: none;">
+                    🚚 Add $50 more for free shipping!
+                </div>
+                
+                <button class="btn btn-primary btn-large" id="checkout-btn" onclick="checkout()">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- DASHBOARD PAGE -->
+    <section id="dashboard" class="page">
+        <div class="dashboard">
+            <h2>Your Dashboard</h2>
+            <p>Track your entries and winnings</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-entries">0</div>
+                    <div class="stat-label">Total Entries</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-orders">0</div>
+                    <div class="stat-label">Orders Placed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="active-campaigns">0</div>
+                    <div class="stat-label">Active Campaigns</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="wins">0</div>
+                    <div class="stat-label">Times Won</div>
+                </div>
+            </div>
+            
+            <div id="campaign-list" class="mt-2">
+                <h3>Your Campaigns</h3>
+                <div id="campaigns-container"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AUTH PAGE -->
+    <section id="auth" class="page">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="showAuthTab('login')">Login</button>
+                    <button class="auth-tab" onclick="showAuthTab('signup')">Sign Up</button>
+                </div>
+                
+                <div id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <input type="email" id="login-email" class="form-input" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="login-password" class="form-input" placeholder="Password" required>
+                    </div>
+                    <button class="btn btn-primary" onclick="login()">Login</button>
+                    <button class="btn btn-secondary" onclick="loginWithGoogle()">
+                        Sign in with Google
+                    </button>
+                </div>
+                
+                <div id="signup-form" class="auth-form hidden">
+                    <div class="form-group">
+                        <input type="text" id="signup-name" class="form-input" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="signup-email" class="form-input" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="signup-password" class="form-input" placeholder="Password (min 6 chars)" required>
+                    </div>
+                    <button class="btn btn-primary" onclick="signup()">Create Account</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ADMIN PAGE -->
+    <section id="admin" class="page">
+        <div class="dashboard">
+            <h2>Admin Panel</h2>
+            <p>Manage products, campaigns, and draw winners</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card" onclick="showAdminSection('products')">
+                    <div class="stat-number" id="admin-total-products">0</div>
+                    <div class="stat-label">Products</div>
+                </div>
+                <div class="stat-card" onclick="showAdminSection('campaigns')">
+                    <div class="stat-number" id="admin-total-campaigns">0</div>
+                    <div class="stat-label">Campaigns</div>
+                </div>
+                <div class="stat-card" onclick="showAdminSection('orders')">
+                    <div class="stat-number" id="admin-total-orders">0</div>
+                    <div class="stat-label">Orders</div>
+                </div>
+                <div class="stat-card" onclick="showAdminSection('users')">
+                    <div class="stat-number" id="admin-total-users">0</div>
+                    <div class="stat-label">Users</div>
+                </div>
+            </div>
+            
+            <div id="admin-content" class="mt-2">
+                <!-- Admin content will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FIREBASE & APP SCRIPT -->
+    <script>
+        // ==================== FIREBASE CONFIGURATION ====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBcDqQh_kDcA9psBqHGQleCfeJadEw0N_g",
+            authDomain: "sunsets-apparel-demo.firebaseapp.com",
+            projectId: "sunsets-apparel-demo",
+            storageBucket: "sunsets-apparel-demo.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef1234567890"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        const functions = firebase.functions();
+        
+        // Collections
+        const usersCollection = db.collection('users');
+        const productsCollection = db.collection('products');
+        const ordersCollection = db.collection('orders');
+        const campaignsCollection = db.collection('campaigns');
+        const entriesCollection = db.collection('entries');
+        const winnersCollection = db.collection('winners');
+        
+        // ==================== GLOBAL STATE ====================
+        let currentUser = null;
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let products = [];
+        let campaigns = [];
+        
+        // ==================== UTILITY FUNCTIONS ====================
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                    <span class="notification-message">${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update nav link
+            const navLink = document.querySelector(`[onclick="showPage('${pageId}')"]`);
+            if (navLink) navLink.classList.add('active');
+            
+            // Load page-specific content
+            switch(pageId) {
+                case 'shop':
+                    loadProducts();
+                    break;
+                case 'cart':
+                    loadCart();
+                    break;
+                case 'dashboard':
+                    if (currentUser) loadDashboard();
+                    break;
+                case 'admin':
+                    if (currentUser) checkAdmin();
+                    break;
+            }
+        }
+        
+        // ==================== AUTH FUNCTIONS ====================
+        function showAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            document.querySelectorAll('.auth-form').forEach(f => {
+                f.classList.add('hidden');
+            });
+            
+            if (tab === 'login') {
+                document.querySelector('[onclick="showAuthTab(\'login\')"]').classList.add('active');
+                document.getElementById('login-form').classList.remove('hidden');
+            } else {
+                document.querySelector('[onclick="showAuthTab(\'signup\')"]').classList.add('active');
+                document.getElementById('signup-form').classList.remove('hidden');
+            }
+        }
+        
+        async function signup() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            if (!name || !email || !password) {
+                showNotification('Please fill all fields', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showNotification('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                await userCredential.user.updateProfile({ displayName: name });
+                
+                // Create user profile
+                await usersCollection.doc(userCredential.user.uid).set({
+                    uid: userCredential.user.uid,
+                    email: email,
+                    displayName: name,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    isAdmin: false,
+                    totalEntries: 0,
+                    totalOrders: 0
+                });
+                
+                showNotification('Account created successfully!', 'success');
+                showPage('dashboard');
+            } catch (error) {
+                showNotification(error.message, 'error');
+            }
+        }
+        
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showNotification('Welcome back!', 'success');
+                showPage('dashboard');
+            } catch (error) {
+                showNotification(error.message, 'error');
+            }
+        }
+        
+        async function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            try {
+                const userCredential = await auth.signInWithPopup(provider);
+                
+                // Create user profile if doesn't exist
+                const userDoc = await usersCollection.doc(userCredential.user.uid).get();
+                if (!userDoc.exists) {
+                    await usersCollection.doc(userCredential.user.uid).set({
+                        uid: userCredential.user.uid,
+                        email: userCredential.user.email,
+                        displayName: userCredential.user.displayName,
+                        photoURL: userCredential.user.photoURL,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        isAdmin: false,
+                        totalEntries: 0,
+                        totalOrders: 0
+                    });
+                }
+                
+                showNotification('Signed in with Google!', 'success');
+                showPage('dashboard');
+            } catch (error) {
+                showNotification(error.message, 'error');
+            }
+        }
+        
+        async function logout() {
+            try {
+                await auth.signOut();
+                showNotification('Logged out successfully', 'success');
+                showPage('home');
+            } catch (error) {
+                showNotification(error.message, 'error');
+            }
+        }
+        
+        // ==================== PRODUCT FUNCTIONS ====================
+        async function loadProducts() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '<div class="loading" style="grid-column: 1/-1; margin: 2rem auto;"></div>';
+            
+            try {
+                const snapshot = await productsCollection.get();
+                products = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                
+                renderProducts();
+            } catch (error) {
+                showNotification('Error loading products', 'error');
+                grid.innerHTML = '<p>Error loading products. Please try again.</p>';
+            }
+        }
+        
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            
+            if (products.length === 0) {
+                grid.innerHTML = `
+                    <div class="text-center" style="grid-column: 1/-1;">
+                        <h3>No products available</h3>
+                        <p>Check back soon for new arrivals!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <img src="${product.imageUrl || 'https://via.placeholder.com/300x250/FF6B35/FFFFFF?text=Sunsets+Apparel'}" 
+                         alt="${product.name}" 
+                         class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-price">$${product.price?.toFixed(2) || '29.99'}</div>
+                        <div class="entries-badge">🎟️ ${product.entriesPerItem || 5} entries</div>
+                        <button class="btn btn-primary" onclick="addToCart('${product.id}')">
+                            Buy & Get Entries
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // ==================== CART FUNCTIONS ====================
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            // Check if already in cart
+            const existingItem = cart.find(item => item.productId === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    productId: product.id,
+                    name: product.name,
+                    price: product.price || 29.99,
+                    imageUrl: product.imageUrl,
+                    entriesPerItem: product.entriesPerItem || 5,
+                    quantity: 1
+                });
+            }
+            
+            saveCart();
+            showNotification(`${product.name} added to cart!`, 'success');
+            updateCartBadge();
+        }
+        
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartBadge();
+        }
+        
+        function updateCartBadge() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badges = document.querySelectorAll('.cart-badge');
+            
+            badges.forEach(badge => {
+                badge.textContent = totalItems;
+                badge.classList.toggle('visible', totalItems > 0);
+            });
+        }
+        
+        function loadCart() {
+            const container = document.getElementById('cart-items');
+            const emptyCart = document.getElementById('empty-cart');
+            
+            if (cart.length === 0) {
+                emptyCart.classList.remove('hidden');
+                container.innerHTML = '';
+                updateCartSummary();
+                return;
+            }
+            
+            emptyCart.classList.add('hidden');
+            container.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <img src="${item.imageUrl || 'https://via.placeholder.com/100/FF6B35/FFFFFF'}" 
+                         class="cart-item-image" alt="${item.name}">
+                    <div>
+                        <h4>${item.name}</h4>
+                        <p>$${item.price.toFixed(2)} each</p>
+                        <p>🎟️ ${item.entriesPerItem} entries per item</p>
+                    </div>
+                    <div>
+                        <button onclick="updateQuantity(${index}, -1)">-</button>
+                        <span style="padding: 0 1rem;">${item.quantity}</span>
+                        <button onclick="updateQuantity(${index}, 1)">+</button>
+                    </div>
+                    <div>
+                        $${(item.price * item.quantity).toFixed(2)}
+                        <button onclick="removeFromCart(${index})" style="margin-left: 1rem;">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            updateCartSummary();
+        }
+        
+        function updateQuantity(index, change) {
+            cart[index].quantity = Math.max(1, cart[index].quantity + change);
+            saveCart();
+            loadCart();
+        }
+        
+        function removeFromCart(index) {
+            const itemName = cart[index].name;
+            cart.splice(index, 1);
+            saveCart();
+            loadCart();
+            showNotification(`${itemName} removed from cart`, 'info');
+        }
+        
+        function updateCartSummary() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const totalEntries = cart.reduce((sum, item) => sum + (item.entriesPerItem * item.quantity), 0);
+            const shipping = subtotal > 50 ? 0 : 9.99;
+            const tax = subtotal * 0.08;
+            const total = subtotal + shipping + tax;
+            
+            document.getElementById('cart-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('cart-entries').textContent = totalEntries;
+            document.getElementById('cart-shipping').textContent = shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+            document.getElementById('cart-tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
+            
+            const freeShippingMsg = document.getElementById('free-shipping-message');
+            if (subtotal < 50) {
+                const needed = (50 - subtotal).toFixed(2);
+                freeShippingMsg.innerHTML = `🚚 Add $${needed} more for free shipping!`;
+                freeShippingMsg.style.display = 'block';
+            } else {
+                freeShippingMsg.style.display = 'none';
+            }
+        }
+        
+        async function checkout() {
+            if (!currentUser) {
+                showNotification('Please login to checkout', 'error');
+                showPage('auth');
+                return;
+            }
+            
+            if (cart.length === 0) {
+                showNotification('Your cart is empty', 'error');
+                return;
+            }
+            
+            try {
+                const orderData = {
+                    userId: currentUser.uid,
+                    userEmail: currentUser.email,
+                    items: cart,
+                    subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                    shipping: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) > 50 ? 0 : 9.99,
+                    tax: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.08,
+                    total: 0, // Will be calculated
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                orderData.total = orderData.subtotal + orderData.shipping + orderData.tax;
+                
+                // Create order
+                const orderRef = await ordersCollection.add(orderData);
+                
+                // Clear cart
+                cart = [];
+                saveCart();
+                
+                showNotification(`Order placed successfully! ID: ${orderRef.id}`, 'success');
+                
+                // Show confirmation (in real app, this would be a separate page)
+                document.getElementById('cart-items').innerHTML = `
+                    <div class="text-center p-2">
+                        <h3>🎉 Order Confirmed!</h3>
+                        <p>Order ID: ${orderRef.id}</p>
+                        <p>You've earned ${orderData.items.reduce((sum, item) => sum + (item.entriesPerItem * item.quantity), 0)} entries!</p>
+                        <p>Check your dashboard for entry status.</p>
+                        <button class="btn btn-primary" onclick="showPage('dashboard')">
+                            View Dashboard
+                        </button>
+                    </div>
+                `;
+                
+            } catch (error) {
+                showNotification('Error placing order: ' + error.message, 'error');
+            }
+        }
+        
+        // ==================== DASHBOARD FUNCTIONS ====================
+        async function loadDashboard() {
+            if (!currentUser) return;
+            
+            try {
+                // Get user data
+                const userDoc = await usersCollection.doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    document.getElementById('total-entries').textContent = userData.totalEntries || 0;
+                    document.getElementById('total-orders').textContent = userData.totalOrders || 0;
+                }
+                
+                // Get campaigns
+                const campaignsSnapshot = await campaignsCollection.where('active', '==', true).get();
+                campaigns = campaignsSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                
+                document.getElementById('active-campaigns').textContent = campaigns.length;
+                
+                // Get wins
+                const winsSnapshot = await winnersCollection.where('userId', '==', currentUser.uid).get();
+                document.getElementById('wins').textContent = winsSnapshot.size;
+                
+                // Render campaigns
+                const container = document.getElementById('campaigns-container');
+                if (campaigns.length === 0) {
+                    container.innerHTML = '<p>No active campaigns at the moment.</p>';
+                } else {
+                    container.innerHTML = campaigns.map(campaign => `
+                        <div class="stat-card" style="text-align: left; margin-bottom: 1rem;">
+                            <h4>${campaign.name}</h4>
+                            <p>${campaign.description || ''}</p>
+                            <p>🎟️ Entries per product: ${campaign.entriesPerProduct || 5}</p>
+                            <p>⏰ Ends: ${new Date(campaign.endDate?.toDate()).toLocaleDateString()}</p>
+                            <button class="btn btn-primary" onclick="showPage('shop')">
+                                Shop Now
+                            </button>
+                        </div>
+                    `).join('');
+                }
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+        
+        // ==================== ADMIN FUNCTIONS ====================
+        async function checkAdmin() {
+            if (!currentUser) {
+                showPage('auth');
+                return;
+            }
+            
+            try {
+                const userDoc = await usersCollection.doc(currentUser.uid).get();
+                if (userDoc.exists && userDoc.data().isAdmin) {
+                    loadAdminDashboard();
+                } else {
+                    showNotification('Admin access required', 'error');
+                    showPage('home');
+                }
+            } catch (error) {
+                showNotification('Error checking admin status', 'error');
+            }
+        }
+        
+        async function loadAdminDashboard() {
+            try {
+                // Get counts
+                const productsCount = await productsCollection.count().get();
+                const campaignsCount = await campaignsCollection.count().get();
+                const ordersCount = await ordersCollection.count().get();
+                const usersCount = await usersCollection.count().get();
+                
+                document.getElementById('admin-total-products').textContent = productsCount.data().count;
+                document.getElementById('admin-total-campaigns').textContent = campaignsCount.data().count;
+                document.getElementById('admin-total-orders').textContent = ordersCount.data().count;
+                document.getElementById('admin-total-users').textContent = usersCount.data().count;
+                
+                showAdminSection('products');
+                
+            } catch (error) {
+                console.error('Error loading admin dashboard:', error);
+            }
+        }
+        
+        function showAdminSection(section) {
+            const content = document.getElementById('admin-content');
+            
+            switch(section) {
+                case 'products':
+                    content.innerHTML = `
+                        <h3>Manage Products</h3>
+                        <button class="btn btn-primary" onclick="addSampleProduct()">
+                            Add Sample Product
+                        </button>
+                        <div id="admin-products-list" class="mt-2"></div>
+                    `;
+                    loadAdminProducts();
+                    break;
+                    
+                case 'campaigns':
+                    content.innerHTML = `
+                        <h3>Manage Campaigns</h3>
+                        <button class="btn btn-primary" onclick="addSampleCampaign()">
+                            Add Sample Campaign
+                        </button>
+                        <div id="admin-campaigns-list" class="mt-2"></div>
+                    `;
+                    loadAdminCampaigns();
+                    break;
+                    
+                case 'orders':
+                    content.innerHTML = `
+                        <h3>Recent Orders</h3>
+                        <div id="admin-orders-list" class="mt-2"></div>
+                    `;
+                    loadAdminOrders();
+                    break;
+                    
+                case 'users':
+                    content.innerHTML = `
+                        <h3>Users</h3>
+                        <div id="admin-users-list" class="mt-2"></div>
+                    `;
+                    loadAdminUsers();
+                    break;
+            }
+        }
+        
+        async function addSampleProduct() {
+            try {
+                const product = {
+                    name: "Sunset Gradient Hoodie",
+                    price: 64.99,
+                    description: "Premium sunset gradient hoodie with bold colors",
+                    category: "hoodies",
+                    featured: true,
+                    entriesPerItem: 15,
+                    sizes: ["S", "M", "L", "XL"],
+                    colors: ["#FF6B35", "#FF4D80", "#8A2BE2"],
+                    imageUrl: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=1000&fit=crop",
+                    active: true,
+                    stock: 100,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                await productsCollection.add(product);
+                showNotification('Sample product added!', 'success');
+                loadAdminProducts();
+            } catch (error) {
+                showNotification('Error adding product: ' + error.message, 'error');
+            }
+        }
+        
+        async function addSampleCampaign() {
+            try {
+                const campaign = {
+                    name: "Summer Giveaway",
+                    description: "Win a $500 shopping spree!",
+                    startDate: new Date(),
+                    endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                    drawDate: new Date(Date.now() + 31 * 24 * 60 * 60 * 1000),
+                    eligibleProducts: [],
+                    entriesPerProduct: 10,
+                    active: true,
+                    drawn: false,
+                    prize: "$500 Shopping Spree",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                await campaignsCollection.add(campaign);
+                showNotification('Sample campaign added!', 'success');
+                loadAdminCampaigns();
+            } catch (error) {
+                showNotification('Error adding campaign: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadAdminProducts() {
+            try {
+                const snapshot = await productsCollection.get();
+                const list = document.getElementById('admin-products-list');
+                list.innerHTML = snapshot.docs.map(doc => {
+                    const product = doc.data();
+                    return `
+                        <div class="stat-card" style="text-align: left; margin-bottom: 1rem;">
+                            <h4>${product.name}</h4>
+                            <p>Price: $${product.price}</p>
+                            <p>Entries: ${product.entriesPerItem}</p>
+                            <p>Stock: ${product.stock}</p>
+                            <button class="btn btn-secondary" onclick="deleteProduct('${doc.id}')">
+                                Delete
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+        
+        async function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                try {
+                    await productsCollection.doc(productId).delete();
+                    showNotification('Product deleted', 'success');
+                    loadAdminProducts();
+                } catch (error) {
+                    showNotification('Error deleting product', 'error');
+                }
+            }
+        }
+        
+        // ==================== COUNTDOWN TIMER ====================
+        function updateCountdown() {
+            // Set target date (7 days from now)
+            const targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 7);
+            
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = '<h3>🎉 Draw in progress!</h3>';
+                return;
+            }
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // ==================== AUTH STATE LISTENER ====================
+        auth.onAuthStateChanged((user) => {
+            currentUser = user;
+            
+            // Update UI based on auth state
+            document.querySelectorAll('[data-auth="logged-in"]').forEach(el => {
+                el.style.display = user ? 'block' : 'none';
+            });
+            
+            document.querySelectorAll('[data-auth="logged-out"]').forEach(el => {
+                el.style.display = user ? 'none' : 'block';
+            });
+            
+            // Check admin status
+            if (user) {
+                usersCollection.doc(user.uid).get().then(doc => {
+                    if (doc.exists && doc.data().isAdmin) {
+                        document.querySelectorAll('[data-auth="admin"]').forEach(el => {
+                            el.style.display = 'block';
+                        });
+                    }
+                });
+            } else {
+                document.querySelectorAll('[data-auth="admin"]').forEach(el => {
+                    el.style.display = 'none';
+                });
+            }
+            
+            // Update user display
+            const userDisplay = document.querySelector('[data-user-display]');
+            if (userDisplay && user) {
+                userDisplay.textContent = user.displayName || user.email;
+            }
+        });
+        
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize countdown timer
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            
+            // Update cart badge
+            updateCartBadge();
+            
+            // Check if user is logged in
+            if (currentUser) {
+                showPage('home');
+            }
+            
+            // Add some sample data if collections are empty
+            initializeSampleData();
+        });
+        
+        async function initializeSampleData() {
+            // Check if we need to add sample data
+            const productsSnapshot = await productsCollection.get();
+            if (productsSnapshot.empty) {
+                console.log('Adding sample data...');
+                
+                // Add sample products
+                const sampleProducts = [
+                    {
+                        name: "Sunset Gradient Hoodie",
+                        price: 64.99,
+                        description: "Premium sunset gradient hoodie",
+                        category: "hoodies",
+                        featured: true,
+                        entriesPerItem: 15,
+                        sizes: ["S", "M", "L", "XL"],
+                        colors: ["#FF6B35", "#FF4D80", "#8A2BE2"],
+                        imageUrl: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=1000&fit=crop",
+                        active: true,
+                        stock: 100,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    },
+                    {
+                        name: "Purple Sunset T-Shirt",
+                        price: 29.99,
+                        description: "Bold purple sunset design",
+                        category: "tshirts",
+                        featured: true,
+                        entriesPerItem: 10,
+                        sizes: ["S", "M", "L", "XL"],
+                        colors: ["#000000", "#FFFFFF", "#8A2BE2"],
+                        imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=1000&fit=crop",
+                        active: true,
+                        stock: 150,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    },
+                    {
+                        name: "Sunset Cap",
+                        price: 24.99,
+                        description: "Adjustable sunset-themed cap",
+                        category: "accessories",
+                        featured: false,
+                        entriesPerItem: 5,
+                        sizes: ["One Size"],
+                        colors: ["#FF6B35", "#1A1A2E"],
+                        imageUrl: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&h=1000&fit=crop",
+                        active: true,
+                        stock: 75,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }
+                ];
+                
+                for (const product of sampleProducts) {
+                    await productsCollection.add(product);
+                }
+                
+                // Add sample campaign
+                const campaign = {
+                    name: "Grand Opening Giveaway",
+                    description: "Celebrate our launch! Win a $1000 wardrobe",
+                    startDate: new Date(),
+                    endDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+                    drawDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+                    eligibleProducts: [],
+                    entriesPerProduct: 10,
+                    active: true,
+                    drawn: false,
+                    prize: "$1000 Shopping Spree",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                await campaignsCollection.add(campaign);
+                
+                console.log('Sample data added successfully!');
+            }
+        }
+    </script>
+</body>
+</html>
